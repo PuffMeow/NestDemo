@@ -1,6 +1,8 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes } from '@nestjs/common';
 import { UserService } from './user.service'
 import { AuthService } from '../auth/auth.service';
+import { RegisterInfoDTO } from './user.dto';
+import { ValidationPipe } from 'src/pipe/validation.pipe';
 
 @Controller('user')
 export class UserController {
@@ -11,8 +13,9 @@ export class UserController {
     return this.userService.findOne(body.username);
   }
 
+  @UsePipes(new ValidationPipe())
   @Post('register')
-  async register(@Body() body: any) {
+  async register(@Body() body: RegisterInfoDTO) {
     return await this.userService.register(body)
   }
 
