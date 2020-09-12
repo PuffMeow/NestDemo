@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as Sequelize from 'sequelize'
 import sequelize from '../../database/sequelize'
 import { makeSalt, encryptPassword } from 'src/utils/cryptogram';
+import { RegisterInfoDTO } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -12,7 +13,7 @@ export class UserService {
   async findOne(username: string): Promise<any | undefined> {
     const sql =
       `SELECT 
-      user_id id, passwd, passwd_salt, real_name realName, role
+      user_id userId,account_name username, passwd, passwd_salt, real_name realName, role
     FROM
       admin_user
     WHERE
@@ -36,7 +37,7 @@ export class UserService {
   }
 
 
-  async register(requestBody: any): Promise<any> {
+  async register(requestBody: RegisterInfoDTO): Promise<any> {
     const { accountName, realName, password, repassword, mobile } = requestBody;
     if (password !== repassword) {
       return {
